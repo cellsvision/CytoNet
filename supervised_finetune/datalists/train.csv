@@ -1,0 +1,9 @@
+﻿id,filename,path,wsicls,yinyang,note,case,research,product,gt,xml_path
+1,WSI1,./sample_data/WSI1,impurity,,impurity,WSI1,,train,NHGUC,
+2,WSI2,./sample_data/WSI2,histiocyte,,histiocyte,WSI2,,train,NHGUC,
+3,WSI3,./sample_data/WSI3,blank,,blank,WSI3,,train,NHGUC,
+4,WSI4,./sample_data/WSI4,AUC,,AUC,WSI4,,train,AUC,
+5,WSI5,./sample_data/WSI5,AUC,,AUC,WSI5,,train,AUC,
+6,WSI6,./sample_data/WSI6,HGUC,,HGUC,WSI6,,train,HGUC,
+7,WSI7,./sample_data/WSI7,yin,,NHGUC,WSI7,,train,NHGUC,
+8,WSI8,./sample_data/WSI8,yin,,NHGUC,WSI8,,train,NHGUC,

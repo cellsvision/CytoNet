@@ -1,0 +1,23 @@
+# Requirements for multi_mission_share
+# Generated from code analysis of multi_mission/multi_mission_share/code/
+
+# Core dependencies (from train_test_multi.py, utils.py)
+numpy==1.19.5
+pandas==1.1.5
+scipy==1.5.4
+
+# Machine Learning (from train_test_multi.py, utils.py)
+scikit-learn==0.24.2
+torch==1.10.1+cu111
+torch-optimizer==0.3.0
+
+# Survival analysis (from utils.py)
+lifelines==0.26.4
+
+# Utilities (from train_test_multi.py)
+tqdm==4.64.1
+
+# Logging and visualization (from train_test_multi.py)
+tensorboard==2.9.1
+
+# Note: Standard library modules (pickle, os, sys, time, datetime, logging) are not listed

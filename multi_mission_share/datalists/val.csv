@@ -1,0 +1,9 @@
+﻿name,format,test,train,val,market_test,daily_test,Slide_methods,reagent,path,hospital,annotation_time,annotation_num,coment,case,quality,GT,grouping,set,infer_or_not,dfs_status,dfs_time
+17,kfb,0,0,1,0,0,,,,,,,,,,Pos,,val,,1,13
+18,kfb,0,0,1,0,0,,,,,,,,,,Neg,,val,,1,45
+19,kfb,0,0,1,0,0,,,,,,,,,,Neg,,val,,1,22
+20,kfb,0,0,1,0,0,,,,,,,,,,Neg,,val,,0,83
+21,kfb,0,0,1,0,0,,,,,,,,,,Pos,,val,,0,3
+22,kfb,0,0,1,0,0,,,,,,,,,,Neg,,val,,0,60
+23,kfb,0,0,1,0,0,,,,,,,,,,Neg,,val,,0,41
+24,kfb,0,0,1,0,0,,,,,,,,,,Neg,,val,,1,16

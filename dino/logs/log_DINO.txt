@@ -1,0 +1,60 @@
+| distributed init (rank 0): env://
+| distributed init (rank 3): env://
+| distributed init (rank 2): env://
+| distributed init (rank 1): env://
+git:
+  sha: N/A, status: clean, branch: N/A
+
+arch: regnet_y_800mf
+batch_size_per_gpu: 4
+clip_grad: 3.0
+data_path: /path/to/imagenet/train/
+dist_url: env://
+drop_path_rate: 0.5
+epochs: 2
+freeze_last_layer: 1
+global_crops_scale: (0.4, 1.0)
+gpu: 0
+local_crops_number: 8
+local_crops_scale: (0.05, 0.4)
+local_rank: 0
+lr: 0.0005
+min_lr: 1e-06
+momentum_teacher: 0.996
+norm_last_layer: True
+num_workers: 12
+optimizer: adamw
+out_dim: 65536
+output_dir: ../models
+patch_size: 16
+rank: 0
+saveckp_freq: 1
+seed: 42
+teacher_temp: 0.04
+use_bn_in_head: False
+use_fp16: True
+valid_data_pkl: ../datalists/sample_cells_valid_img_path.pkl
+warmup_epochs: 1
+warmup_teacher_temp: 0.04
+warmup_teacher_temp_epochs: 0
+weight_decay: 0.04
+weight_decay_end: 0.4
+world_size: 4
+### debug file lenght:  128
+Data loaded: there are 128 images.
+### debug gpu check has_batchnorms true
+0
+### debug gpu check student
+0
+Student and Teacher are built: they are both regnet_y_800mf network.
+Loss, optimizer and schedulers ready.
+Starting DINO training !
+Epoch: [0/2]  [0/8]  eta: 0:00:40  loss: 10.404975 (10.404975)  lr: 0.000000 (0.000000)  wd: 0.040000 (0.040000)  time: 5.037741  data: 2.854737  max mem: 3782
+Epoch: [0/2]  [7/8]  eta: 0:00:00  loss: 10.619706 (10.649937)  lr: 0.000013 (0.000016)  wd: 0.070335 (0.094527)  time: 0.950896  data: 0.356925  max mem: 3782
+Epoch: [0/2] Total time: 0:00:07 (0.987951 s / it)
+Averaged stats: loss: 10.619706 (10.656691)  lr: 0.000013 (0.000016)  wd: 0.070335 (0.094527)
+Epoch: [1/2]  [0/8]  eta: 0:00:19  loss: 10.856192 (10.856192)  lr: 0.000031 (0.000031)  wd: 0.220000 (0.220000)  time: 2.397127  data: 2.051245  max mem: 3782
+Epoch: [1/2]  [7/8]  eta: 0:00:00  loss: 10.993334 (10.985912)  lr: 0.000016 (0.000018)  wd: 0.320003 (0.322973)  time: 0.608469  data: 0.256506  max mem: 3782
+Epoch: [1/2] Total time: 0:00:05 (0.649313 s / it)
+Averaged stats: loss: 10.993334 (10.983142)  lr: 0.000016 (0.000018)  wd: 0.320003 (0.322973)
+Training time 0:00:17

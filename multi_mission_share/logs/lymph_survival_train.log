@@ -1,0 +1,102 @@
+INFO:root:batches_per_epoch 4
+INFO:root:batches_per_epoch_val 2
+INFO:root:Start epoch 0
+INFO:root:epoch 0 Batch: 0/4, total_loss = 2.746, cls_loss = 0.678, surv_loss = 2.068
+INFO:root:epoch 0 Batch: 1/4, total_loss = 2.429, cls_loss = 0.697, surv_loss = 1.732
+INFO:root:epoch 0 Batch: 2/4, total_loss = 2.451, cls_loss = 0.674, surv_loss = 1.777
+INFO:root:epoch 0 Batch: 3/4, total_loss = 2.789, cls_loss = 0.664, surv_loss = 2.125
+INFO:root:best_w_score, 0.2, best_kappa 0
+INFO:root:Epoch 0 Train C-Index: 0.5238, Train Cls AUC: 0.3273, Avg Total Loss: 2.6036
+INFO:root:epoch 0, avg_loss = 2.604, time = 4.431
+INFO:root:best_w_score, 0.5, best_kappa 0
+INFO:root:Validation Classification Results:
+------------------------ 0.15, 0.5117392539978027 ---------------
+0.5,0.5
+------------------------ 0.14, 0.5117392539978027 ---------------
+0.5,0.5
+------------------------ 0.13, 0.5117392539978027 ---------------
+0.5,0.5
+------------------------ 0.12, 0.5117392539978027 ---------------
+0.5,0.5
+------------------------ 0.11, 0.5117392539978027 ---------------
+0.5,0.5
+------------------------ 0.1, 0.5117392539978027 ---------------
+0.5,0.5
+------------------------ 0.09, 0.5117392539978027 ---------------
+0.5,0.5
+------------------------ 0.08, 0.5117392539978027 ---------------
+0.5,0.5
+------------------------ 0.07, 0.5117392539978027 ---------------
+0.5,0.5
+------------------------ 0.06, 0.5117392539978027 ---------------
+0.5,0.5
+------------------------ 0.05, 0.5117392539978027 ---------------
+0.5,0.5
+
+threshold:0.5117392539978027
+[[6 0]
+ [1 1]]
+              precision    recall  f1-score   support
+
+           0     0.8571    1.0000    0.9231         6
+           1     1.0000    0.5000    0.6667         2
+
+    accuracy                         0.8750         8
+   macro avg     0.9286    0.7500    0.7949         8
+weighted avg     0.8929    0.8750    0.8590         8
+
+specificity: 1.0
+sensitivity: 0.5
+INFO:root:Epoch 0 Val C-Index: 0.7059, Val Cls AUC: 0.8333
+INFO:root:Val AUCs: {'12_auc': nan, '24_auc': 0.75, '36_auc': 0.75, '60_auc': 0.75}
+INFO:root:New best model saved at epoch 0 with Combined Metric: 0.7696
+INFO:root:Start epoch 1
+INFO:root:epoch 1 Batch: 0/4, total_loss = 3.412, cls_loss = 0.678, surv_loss = 2.734
+INFO:root:epoch 1 Batch: 1/4, total_loss = 2.476, cls_loss = 0.685, surv_loss = 1.792
+INFO:root:epoch 1 Batch: 2/4, total_loss = 1.339, cls_loss = 0.641, surv_loss = 0.698
+INFO:root:epoch 1 Batch: 3/4, total_loss = 1.776, cls_loss = 0.667, surv_loss = 1.109
+INFO:root:best_w_score, 0.4, best_kappa 0
+INFO:root:Epoch 1 Train C-Index: 0.5238, Train Cls AUC: 0.7636, Avg Total Loss: 2.2508
+INFO:root:epoch 1, avg_loss = 2.251, time = 3.781
+INFO:root:best_w_score, 0.0, best_kappa 0
+INFO:root:Validation Classification Results:
+------------------------ 0.15, -0.48727524280548096 ---------------
+0.0,0.0
+------------------------ 0.14, -0.48727524280548096 ---------------
+0.0,0.0
+------------------------ 0.13, -0.48727524280548096 ---------------
+0.0,0.0
+------------------------ 0.12, -0.48727524280548096 ---------------
+0.0,0.0
+------------------------ 0.11, -0.48727524280548096 ---------------
+0.0,0.0
+------------------------ 0.1, -0.48727524280548096 ---------------
+0.0,0.0
+------------------------ 0.09, -0.48727524280548096 ---------------
+0.0,0.0
+------------------------ 0.08, -0.48727524280548096 ---------------
+0.0,0.0
+------------------------ 0.07, -0.48727524280548096 ---------------
+0.0,0.0
+------------------------ 0.06, -0.48727524280548096 ---------------
+0.0,0.0
+------------------------ 0.05, -0.48727524280548096 ---------------
+0.0,0.0
+
+threshold:-0.48727524280548096
+[[6 0]
+ [2 0]]
+              precision    recall  f1-score   support
+
+           0     0.7500    1.0000    0.8571         6
+           1     0.0000    0.0000    0.0000         2
+
+    accuracy                         0.7500         8
+   macro avg     0.3750    0.5000    0.4286         8
+weighted avg     0.5625    0.7500    0.6429         8
+
+specificity: 1.0
+sensitivity: 0.0
+INFO:root:Epoch 1 Val C-Index: 0.7647, Val Cls AUC: 0.8333
+INFO:root:Val AUCs: {'12_auc': nan, '24_auc': 0.75, '36_auc': 0.75, '60_auc': 1.0}
+INFO:root:New best model saved at epoch 1 with Combined Metric: 0.7990

@@ -1,0 +1,40 @@
+INFO:root:Start epoch 0
+INFO:root:epoch 0 Batch: 0, loss = 1.617, avg_batch_time = 19.350
+INFO:root:epoch 0 Batch: 1, loss = 1.705, avg_batch_time = 9.806
+INFO:root:epoch 0 Batch: 2, loss = 1.591, avg_batch_time = 6.625
+INFO:root:epoch 0 Batch: 3, loss = 1.690, avg_batch_time = 5.033
+INFO:root:epoch 0 Batch: 4, loss = 1.539, avg_batch_time = 4.080
+INFO:root:epoch 0 Batch: 5, loss = 1.720, avg_batch_time = 3.445
+INFO:root:epoch 0 Batch: 6, loss = 1.523, avg_batch_time = 2.988
+INFO:root:epoch 0 Batch: 7, loss = 1.703, avg_batch_time = 2.648
+INFO:root:epoch 0 Batch: 8, loss = 1.863, avg_batch_time = 2.383
+INFO:root:epoch 0 Batch: 9, loss = 1.760, avg_batch_time = 2.170
+INFO:root:epoch 0 Batch: 10, loss = 1.396, avg_batch_time = 1.997
+INFO:root:epoch 0 Batch: 11, loss = 1.521, avg_batch_time = 1.851
+INFO:root:epoch 0 Batch: 12, loss = 1.317, avg_batch_time = 1.730
+INFO:root:epoch 0 Batch: 13, loss = 1.503, avg_batch_time = 1.620
+INFO:root:epoch 0 Batch: 14, loss = 1.618, avg_batch_time = 1.540
+INFO:root:epoch 0 Batch: 15, loss = 1.394, avg_batch_time = 1.458
+INFO:root:epoch 0 Batch: 16, loss = 1.209, avg_batch_time = 1.384
+INFO:root:epoch 0 Batch: 17, loss = 1.202, avg_batch_time = 1.312
+INFO:root:=========================== acc 0.34782608695652173 acc_2 0.5072463768115942 =================
+INFO:root:Start epoch 1
+INFO:root:epoch 1 Batch: 0, loss = 1.371, avg_batch_time = 5.943
+INFO:root:epoch 1 Batch: 1, loss = 1.701, avg_batch_time = 3.110
+INFO:root:epoch 1 Batch: 2, loss = 1.154, avg_batch_time = 2.159
+INFO:root:epoch 1 Batch: 3, loss = 1.079, avg_batch_time = 1.682
+INFO:root:epoch 1 Batch: 4, loss = 1.054, avg_batch_time = 1.394
+INFO:root:epoch 1 Batch: 5, loss = 1.359, avg_batch_time = 1.202
+INFO:root:epoch 1 Batch: 6, loss = 0.984, avg_batch_time = 1.066
+INFO:root:epoch 1 Batch: 7, loss = 1.262, avg_batch_time = 0.964
+INFO:root:epoch 1 Batch: 8, loss = 0.952, avg_batch_time = 0.886
+INFO:root:epoch 1 Batch: 9, loss = 1.812, avg_batch_time = 0.822
+INFO:root:epoch 1 Batch: 10, loss = 1.200, avg_batch_time = 0.771
+INFO:root:epoch 1 Batch: 11, loss = 1.336, avg_batch_time = 0.728
+INFO:root:epoch 1 Batch: 12, loss = 1.239, avg_batch_time = 0.693
+INFO:root:epoch 1 Batch: 13, loss = 1.371, avg_batch_time = 0.662
+INFO:root:epoch 1 Batch: 14, loss = 1.128, avg_batch_time = 0.635
+INFO:root:epoch 1 Batch: 15, loss = 1.181, avg_batch_time = 0.627
+INFO:root:epoch 1 Batch: 16, loss = 1.150, avg_batch_time = 0.605
+INFO:root:epoch 1 Batch: 17, loss = 0.737, avg_batch_time = 0.580
+INFO:root:=========================== acc 0.7391304347826086 acc_2 0.8260869565217391 =================
