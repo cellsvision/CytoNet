@@ -2,7 +2,7 @@
 
 ## 项目概述
 
-CytoNet是一个用于液基细胞学样本自动诊断分类的深度学习系统。该系统采用二阶段多类别特征聚合的注意力机制多实例学习（MIL）框架，实现患者级（slide-level）的分类任务与生存分析预测。
+CytoNet是一个用于液基细胞学样本自动诊断分类的深度学习系统。该系统采用二阶段多类别特征聚合的注意力机制多实例学习（MIL）框架，实现患者级（slide-level）的分类任务与生存分析预测。如需使用，请按照阶段一到阶段三的数据要求、环境要求进行准备，然后按三个阶段的顺序进行使用。
 
 ### 核心特点
 
@@ -187,16 +187,9 @@ L_surv = -Σ_e=1 (log_h_i - log(Σ_j∈R_i exp(log_h_j)))
 
 ## 快速开始
 
-### 环境要求
+### 环境依赖
 
-```bash
-# Python 3.7+
-# PyTorch 1.9+
-pip3 install torch torchvision
-pip3 install timm albumentations pandas numpy scikit-learn
-pip3 install lifelines tensorboard torch-optimizer
-pip3 install easydict PIL cv2
-```
+参考requirements.txt
 
 ### 阶段一：DINO预训练
 

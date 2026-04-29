@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-CytoNet is a deep learning system for automated diagnostic classification of liquid-based cytology samples. The system employs a two-stage multi-class feature aggregation framework with attention-based Multiple Instance Learning (MIL), enabling patient-level (slide-level) classification and survival analysis prediction.
+CytoNet is a deep learning system for automated diagnostic classification of liquid-based cytology samples. The system employs a two-stage multi-class feature aggregation framework with attention-based Multiple Instance Learning (MIL), enabling patient-level (slide-level) classification and survival analysis prediction. If you wish to use it, please prepare according to the data and environment requirements for Stages 1 to 3, and then follow the three stages in sequence.
 
 ### Key Features
 
@@ -187,16 +187,9 @@ L_surv = -Σ_{i:E_i=1} (log_h_i - log(Σ_{j∈R_i} exp(log_h_j)))
 
 ## Quick Start
 
-### Environment Setup
+### Dependencies
 
-```bash
-# Python 3.7+
-# PyTorch 1.9+
-pip3 install torch torchvision
-pip3 install timm albumentations pandas numpy scikit-learn
-pip3 install lifelines tensorboard torch-optimizer
-pip3 install easydict Pillow opencv-python
-```
+Refer to requirements.txt
 
 ### Stage 1: DINO Pre-training
 
