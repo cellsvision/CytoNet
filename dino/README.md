@@ -24,8 +24,8 @@ dino/
 │   ├── checkpoint0001.pth   # Epoch 1 checkpoint
 │   └── log.txt              # Training records
 ├── results/                 # Results output directory
-├── sample_data/             # Sample data directory (128 cell images)
-└── README_EN.md             # English documentation
+├── sample_data/             # Sample data directory
+└── README.md                # English documentation
 ```
 
 ## Core Module Description
@@ -33,7 +33,7 @@ dino/
 ### 1. main_dino.py - DINO Training Main Program
 
 Main features:
-- **Architecture Support**: Vision Transformer (ViT-Tiny/Small/Base) and RegNet architectures
+- **Architecture Support**: Vision Transformer (ViT-Tiny/Small/Base) and various CNN architectures
 - **Multi-crop Training Strategy**: Generates 2 global crops and 8 local crops for enhanced feature learning
 - **Teacher-Student Network**: Teacher network updated via EMA (Exponential Moving Average)
 - **DINO Loss Function**: Cross-entropy based knowledge distillation loss
@@ -45,12 +45,14 @@ Key parameters:
 |-----------|---------|-------------|
 | `--arch` | vit_small | Model architecture |
 | `--epochs` | 2 | Training epochs |
-| `--batch_size_per_gpu` | 96 | Batch size per GPU |
+| `--batch_size_per_gpu` | 4 | Batch size per GPU |
 | `--lr` | 0.0005 | Learning rate |
 | `--out_dim` | 65536 | DINO head output dimension |
 | `--local_crops_number` | 8 | Number of local crops |
 | `--global_crops_scale` | (0.4, 1.) | Global crop scale range |
 | `--local_crops_scale` | (0.05, 0.4) | Local crop scale range |
+
+*Default values are for reference only
 
 ### 2. vision_transformer.py - Vision Transformer Implementation
 
@@ -82,7 +84,7 @@ Image preprocessing:
 Main features:
 - **Distributed Training**: `init_distributed_mode()`, `get_world_size()`, `get_rank()`
 - **Data Augmentation**: `GaussianBlur`, `Solarization`
-- **Optimizer**: `LARS` optimizer implementation
+- **Optimizer**: `adamw` optimizer implementation
 - **Learning Rate Schedule**: `cosine_scheduler()` cosine annealing schedule
 - **Model Wrapper**: `MultiCropWrapper` handles multi-resolution inputs
 - **Logging**: `MetricLogger`, `SmoothedValue`
@@ -101,28 +103,18 @@ DINO employs a multi-crop data augmentation strategy:
    - Quantity: 8 crops
    - Includes: random flip, color jitter, Gaussian blur
 
-Normalization parameters (optimized for cell images):
-- Mean: (0.7896, 0.8113, 0.8456)
-- Std: (0.1599, 0.1378, 0.1046)
-
 ## Quick Start
 
 ### Requirements
 
-- Python 3.7+
-- PyTorch 1.9+
-- torchvision
-- CUDA 11.0+ (recommended)
-- OpenCV (cv2)
-- PIL (Pillow)
-- NumPy
+Refer to requirements.txt
 
 ### Training Command
 
 ```bash
 cd code
 
-# Train with 4 GPUs
+# Train with 4 GPUs (this study's training example)
 export CUDA_VISIBLE_DEVICES=0,1,2,3
 python3 -m torch.distributed.run --nproc_per_node=4 main_dino.py \
     --arch regnet_y_800mf \
@@ -130,19 +122,6 @@ python3 -m torch.distributed.run --nproc_per_node=4 main_dino.py \
     --output_dir ../models \
     --batch_size_per_gpu 4 \
     --saveckp_freq 1
-```
-
-### Training with ViT Model
-
-```bash
-python3 -m torch.distributed.run --nproc_per_node=4 main_dino.py \
-    --arch vit_small \
-    --patch_size 16 \
-    --valid_data_pkl ../datalists/sample_cells_valid_img_path.pkl \
-    --output_dir ../models \
-    --batch_size_per_gpu 4 \
-    --epochs 100 \
-    --saveckp_freq 10
 ```
 
 ## Training Log Example
@@ -185,7 +164,7 @@ This project is particularly suitable for:
 
 ## License
 
-This project is based on Apache License 2.0, with code derived from Facebook Research DINO project.
+This project is for research use only.
 
 ---
 

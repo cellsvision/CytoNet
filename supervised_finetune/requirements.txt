@@ -1,27 +1,20 @@
 # Requirements for supervised_finetune
 # Generated from code analysis of multi_mission/supervised_finetune/code/
 
-# Core dependencies (from train_test.py, config.py)
 numpy==1.19.5
 pandas==1.1.5
 scipy==1.5.4
 easydict==1.9
 
-# Machine Learning (from train_test.py)
 scikit-learn==0.24.2
 torch==1.10.1+cu111
 torchvision==0.11.2+cu111
 timm==0.6.5
 
-# Image processing (from train_test.py)
 albumentations==1.0.1
 opencv-python==4.5.5.64
 Pillow==8.4.0
 
-# Utilities (from train_test.py, convert_to_torchvision.py, extract_weights.py)
 tqdm==4.64.1
 
-# Logging and visualization (from train_test.py)
 tensorboard==2.9.1
-
-# Note: Standard library modules (glob, logging, time, os, sys, random, copy, pickle) are not listed

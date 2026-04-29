@@ -2,7 +2,7 @@
 
 ## 项目简介
 
-本项目基于 Facebook Research 的 DINO (Self-Distillation with No Labels) 方法，实现用于细胞图像的自监督特征学习。DINO 是一种无需标签的自监督学习方法，通过知识蒸馏的方式训练视觉模型，特别适用于医学图像分析领域。
+本项目基于 DINO (Self-Distillation with No Labels) 方法，实现用于细胞图像的自监督特征学习。DINO 是一种无需标签的自监督学习方法，通过知识蒸馏的方式训练视觉模型，特别适用于医学图像分析领域。
 
 ## 目录结构
 
@@ -15,16 +15,16 @@ dino/
 │   ├── csv_dataloader.py    # 数据加载器
 │   └── utils.py             # 工具函数
 ├── datalists/               # 数据列表目录
-│   └── sample_cells_valid_img_path.pkl  # 样本图像路径列表
+│   └── sample_cells_valid_img_path.pkl  # 样本图像路径列表示例
 ├── logs/                    # 日志目录
-│   └── log_DINO.txt         # 训练日志
-├── models/                  # 模型保存目录
+│   └── log_DINO.txt         # 训练日志示例
+├── models/                  # 模型保存目录示例
 │   ├── checkpoint.pth       # 最新检查点
 │   ├── checkpoint0000.pth   # Epoch 0 检查点
 │   ├── checkpoint0001.pth   # Epoch 1 检查点
 │   └── log.txt              # 训练记录
-├── results/                 # 结果输出目录
-├── sample_data/             # 样本数据目录（128张细胞图像）
+├── results/                 # 结果输出目录示例
+├── sample_data/             # 样本数据目录示例
 └── README_CN.md             # 中文说明文档
 ```
 
@@ -33,7 +33,7 @@ dino/
 ### 1. main_dino.py - DINO训练主程序
 
 主要功能：
-- **模型架构支持**：支持 Vision Transformer (ViT-Tiny/Small/Base) 和 RegNet 等多种架构
+- **模型架构支持**：支持 Vision Transformer (ViT-Tiny/Small/Base) 和 各种CNN架构
 - **多裁剪训练策略**：生成2个全局裁剪和8个局部裁剪，增强特征学习
 - **教师-学生网络**：通过 EMA (Exponential Moving Average) 更新教师网络
 - **DINO损失函数**：基于交叉熵的知识蒸馏损失
@@ -45,12 +45,14 @@ dino/
 |------|--------|------|
 | `--arch` | vit_small | 模型架构 |
 | `--epochs` | 2 | 训练轮数 |
-| `--batch_size_per_gpu` | 96 | 每GPU批次大小 |
+| `--batch_size_per_gpu` | 4 | 每GPU批次大小 |
 | `--lr` | 0.0005 | 学习率 |
 | `--out_dim` | 65536 | DINO头输出维度 |
 | `--local_crops_number` | 8 | 局部裁剪数量 |
 | `--global_crops_scale` | (0.4, 1.) | 全局裁剪尺度范围 |
 | `--local_crops_scale` | (0.05, 0.4) | 局部裁剪尺度范围 |
+
+*默认值仅供参考
 
 ### 2. vision_transformer.py - Vision Transformer实现
 
@@ -82,7 +84,7 @@ dino/
 主要功能：
 - **分布式训练**：`init_distributed_mode()`, `get_world_size()`, `get_rank()`
 - **数据增强**：`GaussianBlur`, `Solarization`
-- **优化器**：`LARS` 优化器实现
+- **优化器**：`adamw` 优化器实现
 - **学习率调度**：`cosine_scheduler()` 余弦退火调度
 - **模型包装**：`MultiCropWrapper` 处理多分辨率输入
 - **日志记录**：`MetricLogger`, `SmoothedValue`
@@ -101,28 +103,18 @@ DINO采用多裁剪数据增强策略：
    - 数量：8个
    - 包含：随机翻转、颜色抖动、高斯模糊
 
-归一化参数（针对细胞图像优化）：
-- Mean: (0.7896, 0.8113, 0.8456)
-- Std: (0.1599, 0.1378, 0.1046)
-
 ## 快速开始
 
 ### 环境要求
 
-- Python 3.7+
-- PyTorch 1.9+
-- torchvision
-- CUDA 11.0+ (推荐)
-- OpenCV (cv2)
-- PIL (Pillow)
-- NumPy
+参考requirements.txt
 
 ### 训练命令
 
 ```bash
 cd code
 
-# 使用4个GPU训练
+# 使用4个GPU训练（本研究训练示例）
 export CUDA_VISIBLE_DEVICES=0,1,2,3
 python3 -m torch.distributed.run --nproc_per_node=4 main_dino.py \
     --arch regnet_y_800mf \
@@ -130,19 +122,6 @@ python3 -m torch.distributed.run --nproc_per_node=4 main_dino.py \
     --output_dir ../models \
     --batch_size_per_gpu 4 \
     --saveckp_freq 1
-```
-
-### 使用ViT模型训练
-
-```bash
-python3 -m torch.distributed.run --nproc_per_node=4 main_dino.py \
-    --arch vit_small \
-    --patch_size 16 \
-    --valid_data_pkl ../datalists/sample_cells_valid_img_path.pkl \
-    --output_dir ../models \
-    --batch_size_per_gpu 4 \
-    --epochs 100 \
-    --saveckp_freq 10
 ```
 
 ## 训练日志示例
@@ -185,7 +164,7 @@ Training time 0:00:17
 
 ## 许可证
 
-本项目基于 Apache License 2.0 许可证，代码来源于 Facebook Research DINO 项目。
+本项目仅供研究使用。
 
 ---
 

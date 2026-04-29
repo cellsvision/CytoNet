@@ -23,13 +23,6 @@ multi_mission_share/
 └── results/                       # Evaluation results
 ```
 
-## Model Architecture
-
-- **Backbone**: Attention-based MIL with shared dense layers
-- **Classification Head**: Multi-layer perceptron for binary classification
-- **Survival Head**: Regression head for risk score prediction
-- **Loss Function**: Combined Cross-Entropy + Cox PH Loss
-
 ## Data Format
 
 ### CSV Columns
@@ -41,8 +34,14 @@ multi_mission_share/
 | `dfs_time` | Disease-free survival time (months) |
 
 ### Feature Files
-- Format: `.pkl` (pickle) files containing 768-dimensional features
-- Each file contains features for multiple patches organized by class type
+- Format: `.pkl` (pickle) files
+- Each file contains the feature maps inferred from patches cropped at 40x magnification according to patch size. For each class, the top N features are sorted by confidence in descending order, concatenated, and aggregated into a Tensor. For example, if an image can be cropped into 50 × 60 patches, each patch is input into the model to produce patch-level classification results and feature maps. The top 300 features per class (sorted by confidence in descending order) are concatenated into a [6×300, featuremap_length] array and saved as a .pkl file. During usage, the first 200 feature maps are extracted from each group of 300.
+
+```bash
+cls_bag_size = 300
+top_cls_bag_size = 300
+use_cls_bag_size = 200
+```
 
 ## Training
 
@@ -52,26 +51,21 @@ python train_test_multi.py
 ```
 
 ### Key Parameters
-- `fea_size`: Feature dimension (768)
-- `batch_size`: Training batch size (4)
-- `max_epoch`: Maximum training epochs (100)
-- `max_patches`: Maximum patches per class (200)
-- `alpha`: Classification loss weight (1.0)
-- `beta`: Survival loss weight (1.0)
+- `fea_size`: Feature dimension
+- `batch_size`: Training batch size
+- `max_epoch`: Maximum training epochs
+- `max_patches`: Maximum patches per class
+- `alpha`: Classification loss weight
+- `beta`: Survival loss weight
 
 ## Evaluation Metrics
 
 - **Classification**: AUC, Sensitivity, Specificity
-- **Survival**: C-Index, Time-dependent AUC (12, 24, 36, 60 months)
+- **Survival**: C-Index, Time-dependent AUC (12, 24, 36, 48, 60 months)
 
 ## Dependencies
 
-- PyTorch
-- scikit-learn
-- lifelines
-- pandas
-- numpy
-- tensorboard
+Refer to requirements.txt
 
 ## Sample Data
 
@@ -79,10 +73,7 @@ The `sample_data/` directory contains 24 sample feature files (1.pkl - 24.pkl) f
 
 ## Logs
 
-Training logs are saved to `logs/lymph_survival_train.log` with:
-- Per-batch loss values
-- Per-epoch C-Index and AUC metrics
-- Validation results
+Training logs are saved to `logs`
 
 ---
 

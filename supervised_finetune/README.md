@@ -10,7 +10,7 @@ The project supports classification of the following 6 categories:
 
 | Class Code | Class Name | Description |
 |------------|------------|-------------|
-| NILM | Negative | Normal urine cells (Negative for High-Grade Urothelial Carcinoma) |
+| NHGUC | Negative | Normal urine cells (NILM/NHGUC) |
 | AUC | Atypical Urothelial Cells | Atypical urothelial cells |
 | HGUC | High-Grade Urothelial Carcinoma | High-grade urothelial carcinoma |
 | IMPURITY | Impurity | Impurity regions in images |
@@ -40,8 +40,10 @@ supervised_finetune/
     ├── HGUC/            # HGUC class samples
     ├── histiocyte/      # Histiocyte samples
     ├── impurity/        # Impurity samples
-    └── NHGUC/           # NHGUC class samples
+    └── yin/             # NILM/NHGUC class samples
 ```
+
+*Note: Annotators may habitually use NILM or NHGUC to label negative cases. This is merely a difference in notation; both truly represent normal urothelial cells.*
 
 ## Model Architecture
 
@@ -49,28 +51,9 @@ supervised_finetune/
 - **Attention Mechanism**: CBAM (Convolutional Block Attention Module)
 - **Classification Head**: 6-class classification output
 
-### Model Details
-
-The [`UrineModel`](code/train_test.py:259) class consists of:
-1. Feature extraction using RegNet-Y-800MF backbone
-2. CBAM attention module for channel and spatial attention
-3. 6-channel convolutional layer for class activation mapping
-4. Adaptive average pooling and flatten for final output
-
 ## Dependencies
 
-- Python 3.x
-- PyTorch
-- torchvision
-- timm
-- albumentations
-- pandas
-- numpy
-- scikit-learn
-- Pillow
-- OpenCV
-- tensorboard
-- easydict
+Refer to requirements.txt
 
 ## Usage
 
@@ -103,7 +86,7 @@ Modify training configuration in [`code/config.py`](code/config.py):
 ```python
 train_cfg.GPU_ID = "0, 1, 2, 3"  # GPU device IDs
 train_cfg.batch_size = 4          # Batch size
-train_cfg.max_epoch = 2           # Training epochs
+train_cfg.max_epoch = 30           # Training epochs
 train_cfg.target_size = 1024     # Input image size
 train_cfg.checkpoint_path = '../checkpoint/teacher_backbone_torchvision.pth'  # Pre-trained weights path
 ```
@@ -154,19 +137,11 @@ The training process uses the albumentations library for data augmentation:
 - ISO noise
 - Multiplicative noise
 
-### Class Balancing
-The [`UrineDataset`](code/train_test.py:116) class implements class balancing:
-- Limits samples per class from each WSI
-- `use_n_others`: Maximum NILM/NHGUC samples per slide (default: 12)
-- `use_his`: Maximum histiocyte samples per slide (default: 4)
-- `use_imp`: Maximum impurity samples per slide (default: 4)
-- `use_blk`: Maximum blank samples per slide (default: 4)
-
 ## Evaluation Metrics
 
 - **Accuracy**: 6-class classification accuracy
 - **Binary Accuracy (acc_2)**: Accuracy after merging classes into negative/positive
-  - Negative classes: NILM, NHGUC, IMPURITY, HISTIOCYTE, BLANK
+  - Negative classes: NILM/NHGUC, IMPURITY, HISTIOCYTE, BLANK
   - Positive classes: AUC, HGUC
 
 ## Code Files Description

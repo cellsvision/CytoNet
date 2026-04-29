@@ -1,8 +1,8 @@
-# 尿液细胞学图像分类监督微调项目
+# 液基细胞学图像分类监督微调项目（尿液）
 
 ## 项目简介
 
-本项目是一个基于深度学习的尿液细胞学图像分类监督微调（Supervised Fine-tuning）系统。该系统使用预训练的 RegNet-Y-800MF 模型作为骨干网络，结合 CBAM 注意力机制，对尿液细胞学图像进行多类别分类。
+本项目是一个基于深度学习的液基细胞学图像分类监督微调（Supervised Fine-tuning）系统。该系统使用预训练的 RegNet-Y-800MF 模型作为骨干网络，结合 CBAM 注意力机制，以尿液细胞学为示例，对尿液细胞学图像进行多类别分类。
 
 ## 分类类别
 
@@ -10,7 +10,7 @@
 
 | 类别代码 | 类别名称 | 描述 |
 |---------|---------|------|
-| NILM | 阴性 | 正常尿液细胞 |
+| NHGUC | 阴性 | 正常尿液细胞（NILM/NHGUC） |
 | AUC | 非典型尿路上皮细胞 | Atypical Urothelial Cells |
 | HGUC | 高级别尿路上皮癌 | High-Grade Urothelial Carcinoma |
 | IMPURITY | 杂质 | 图像中的杂质区域 |
@@ -40,8 +40,10 @@ supervised_finetune/
     ├── HGUC/            # HGUC 类别样本
     ├── histiocyte/      # 组织细胞样本
     ├── impurity/        # 杂质样本
-    └── NHGUC/           # NHGUC 类别样本
+    └── yin/             # NILM/NHGUC 类别样本
 ```
+
+*标注人员可能会习惯使用NILM或NHGUC的写法来标注阴性，仅写法差异，真实含义均代表正常的尿路上皮细胞。
 
 ## 模型架构
 
@@ -51,17 +53,7 @@ supervised_finetune/
 
 ## 环境依赖
 
-- Python 3.x
-- PyTorch
-- torchvision
-- timm
-- albumentations
-- pandas
-- numpy
-- scikit-learn
-- Pillow
-- OpenCV
-- tensorboard
+参考requirements.txt
 
 ## 使用方法
 
@@ -94,7 +86,7 @@ sample_data/
 ```python
 train_cfg.GPU_ID = "0, 1, 2, 3"  # GPU 设备ID
 train_cfg.batch_size = 4          # 批次大小
-train_cfg.max_epoch = 2           # 训练轮数
+train_cfg.max_epoch = 30           # 训练轮数
 train_cfg.target_size = 1024     # 输入图像尺寸
 train_cfg.checkpoint_path = '../checkpoint/teacher_backbone_torchvision.pth'  # 预训练权重路径
 ```
@@ -149,7 +141,7 @@ python convert_to_torchvision.py
 
 - **准确率 (Accuracy)**: 6 类分类准确率
 - **二分类准确率 (acc_2)**: 将类别合并为阴性/阳性后的准确率
-  - 阴性类别: NILM, NHGUC, IMPURITY, HISTIOCYTE, BLANK
+  - 阴性类别: NILM/NHGUC, IMPURITY, HISTIOCYTE, BLANK
   - 阳性类别: AUC, HGUC
 
 ## 代码文件说明

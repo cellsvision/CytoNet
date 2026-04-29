@@ -2,7 +2,7 @@
 
 ## 项目概述
 
-CytoNet是一个用于淋巴结穿刺细胞学样本自动诊断分类的深度学习系统。该系统采用二阶段多类别特征聚合的注意力机制多实例学习（MIL）框架，实现患者级（slide-level）的分类任务与生存分析预测。
+CytoNet是一个用于液基细胞学样本自动诊断分类的深度学习系统。该系统采用二阶段多类别特征聚合的注意力机制多实例学习（MIL）框架，实现患者级（slide-level）的分类任务与生存分析预测。
 
 ### 核心特点
 
@@ -40,7 +40,7 @@ CytoNet/
 │   └── sample_data/               # 分类样本数据
 │       ├── AUC/                   # AUC类别样本
 │       ├── HGUC/                  # HGUC类别样本
-│       ├── NILM/                  # 正常类别样本
+│       ├── yin/                   # 正常类别样本（NILM/NHGUC）
 │       ├── HISTIOCYTE/            # 组织细胞样本
 │       ├── IMPURITY/              # 杂质样本
 │       └── blank/                 # 空白区域样本
@@ -63,24 +63,31 @@ CytoNet/
 
 ### 1. 输入数据组织
 
-原始输入来源于全片穿刺淋巴结细胞学图像（WSI）的细粒度目标检测结果：
+#### 阶段一：DINO自监督预训练
+
+使用超过10万张未标记WSI，按大小尺寸进行裁剪。
+
+#### 阶段二：监督微调（尿液细胞学）
 
 - 每张WSI被划分为多个图像块（patches）
-- 每个图像块被分配至6个细粒度类别：
-  - **NILM**：正常细胞
+- 根据标注裁切对应标注的图像块，并针对尿液细胞学特殊的背景图（血液/胶质/尿蛋白、组织细胞）与空白背景，准备6个类别的图像块：
+  - **NHGUC**：正常细胞（NILM/NHGUC）
   - **AUC**：非典型尿细胞
   - **HGUC**：高级别尿细胞癌
   - **HISTIOCYTE**：组织细胞
   - **IMPURITY**：杂质
   - **BLANK**：空白区域
 
-- 对每类别，选取top-200个最具代表性的图像块
-- 提取768维视觉特征，最终组织为 `(6 × 200, 768)` 的特征矩阵
+#### 阶段三：
+
+- 原始输入来源于全片尿液细胞学图像（WSI）的细胞分类结果：
+  - 按40倍图像下、符合patch size大小的patch推理的类别与featuremap按照每一类的置信度前N个feature倒序排列并拼接聚合形成Tensor。例如，某张图可以裁切出50 * 60张patch，每个patch输入模型输出patch级别分类结果以及提取出特征图后，按照每一类置信度倒序的前300拼接成 [6*300, featuremap_length] 数组，保存成pkl。
+- 数据输入时，选取每类别top-200个最具代表性的图像块
 
 ### 2. 阶段一：DINO自监督预训练
 
 #### 模型架构
-- 支持Vision Transformer (ViT-Tiny/Small/Base) 和 RegNet-Y-800MF
+- 支持Vision Transformer (ViT-Tiny/Small/Base) 和 各种CNN架构
 - 教师-学生网络结构，通过EMA更新教师权重
 - DINO投影头：3层MLP + L2归一化
 
@@ -108,7 +115,7 @@ CytoNet/
 #### 分类类别
 ```python
 train_patch_class_id = {
-    'nilm': 0,     # 正常
+    'nilm': 0,     # 正常（NILM/NHGUC）
     'auc': 1,      # 非典型尿细胞
     'hguc': 2,     # 高级别尿细胞癌
     'impurity': 3, # 杂质
@@ -174,7 +181,7 @@ L_surv = -Σ_e=1 (log_h_i - log(Σ_j∈R_i exp(log_h_j)))
 
 #### 评估指标
 - **分类**：AUC、敏感度、特异度、Kappa系数
-- **生存分析**：C-Index、时间依赖AUC (12/24/36/60月)
+- **生存分析**：C-Index、时间依赖AUC (12/24/36/48/60月)
 
 ---
 
@@ -196,15 +203,14 @@ pip3 install easydict PIL cv2
 ```bash
 cd dino/code
 
-# 使用4个GPU训练
+# 使用4个GPU训练(示例)
 export CUDA_VISIBLE_DEVICES=0,1,2,3
 python3 -m torch.distributed.run --nproc_per_node=4 main_dino.py \
     --arch regnet_y_800mf \
     --valid_data_pkl ../datalists/sample_cells_valid_img_path.pkl \
     --output_dir ../models \
     --batch_size_per_gpu 4 \
-    --epochs 100 \
-    --saveckp_freq 10
+    --saveckp_freq 1
 ```
 
 ### 阶段二：权重转换与微调
@@ -277,7 +283,7 @@ WSI2
 sample_data/
 ├── AUC/WSI4/AUC/*.png
 ├── HGUC/WSI6/HGUC/*.png
-├── NILM/WSI7/NILM/*.png
+├── yin/WSI7/NILM/*.png
 ...
 ```
 
@@ -311,7 +317,7 @@ patient_002,Neg,0,60
 
 ## 应用场景
 
-1. **淋巴结穿刺细胞学诊断**
+1. **尿液细胞学淋巴结转移诊断**
    - 自动区分阴性与阳性病例
    - 辅助病理医生诊断
 

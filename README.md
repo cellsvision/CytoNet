@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-CytoNet is a deep learning system for automated diagnostic classification of lymph node fine-needle aspiration cytology samples. The system employs a two-stage multi-class feature aggregation framework with attention-based Multiple Instance Learning (MIL), enabling patient-level (slide-level) classification and survival analysis prediction.
+CytoNet is a deep learning system for automated diagnostic classification of liquid-based cytology samples. The system employs a two-stage multi-class feature aggregation framework with attention-based Multiple Instance Learning (MIL), enabling patient-level (slide-level) classification and survival analysis prediction.
 
 ### Key Features
 
@@ -40,7 +40,7 @@ CytoNet/
 │   └── sample_data/               # Cell sample data
 │       ├── AUC/                   # AUC class samples
 │       ├── HGUC/                  # HGUC class samples
-│       ├── NILM/                  # Normal samples
+│       ├── yin/                   # Normal samples (NILM/NHGUC)
 │       ├── HISTIOCYTE/            # Histiocyte samples
 │       ├── IMPURITY/              # Impurity samples
 │       └── blank/                 # Blank region samples
@@ -63,19 +63,26 @@ CytoNet/
 
 ### 1. Input Data Organization
 
-The raw input originates from fine-grained object detection results on whole slide images (WSI) of lymph node fine-needle aspiration cytology:
+#### Stage 1: DINO Self-Supervised Pre-training
+
+Uses over 100,000 unlabeled WSIs, cropped by size.
+
+#### Stage 2: Supervised Fine-tuning (Urine Cytology)
 
 - Each WSI is divided into multiple patches
-- Each patch is assigned to one of 6 fine-grained classes:
-  - **NILM**: Normal cells
+- Based on annotations, corresponding labeled patches are cropped. For urine cytology-specific background images (blood/glial/urinary protein, histiocytes) and blank backgrounds, 6 categories of patches are prepared:
+  - **NHGUC**: Normal cells (NILM/NHGUC)
   - **AUC**: Atypical Urothelial Cells
   - **HGUC**: High-grade Urothelial Carcinoma
   - **HISTIOCYTE**: Histiocytes
   - **IMPURITY**: Impurities
   - **BLANK**: Blank regions
 
-- For each class, select top-200 most representative patches
-- Extract 768-dimensional visual features, organized as `(6 × 200, 768)` feature matrix
+#### Stage 3:
+
+- The raw input originates from cell classification results on whole slide urine cytology images (WSI):
+  - Under 40x magnification, patches matching the patch size are inferred for their class and feature map. For each class, the top-N features by confidence are sorted in descending order, concatenated, and aggregated into a Tensor. For example, if an image can be cropped into 50 × 60 patches, each patch is fed into the model to output a patch-level classification result and extract a feature map. The top 300 features per class (by confidence, descending) are concatenated into a [6×300, featuremap_length] array and saved as a pkl file.
+- During data input, the top-200 most representative patches per class are selected.
 
 ### 2. Stage 1: DINO Self-Supervised Pre-training
 
@@ -108,7 +115,7 @@ The raw input originates from fine-grained object detection results on whole sli
 #### Classification Categories
 ```python
 train_patch_class_id = {
-    'nilm': 0,     # Normal
+    'nilm': 0,     # Normal (NILM/NHGUC)
     'auc': 1,      # Atypical Urothelial Cells
     'hguc': 2,     # High-grade Urothelial Carcinoma
     'impurity': 3, # Impurity
@@ -174,7 +181,7 @@ L_surv = -Σ_{i:E_i=1} (log_h_i - log(Σ_{j∈R_i} exp(log_h_j)))
 
 #### Evaluation Metrics
 - **Classification**: AUC, Sensitivity, Specificity, Kappa coefficient
-- **Survival Analysis**: C-Index, Time-dependent AUC (12/24/36/60 months)
+- **Survival Analysis**: C-Index, Time-dependent AUC (12/24/36/48/60 months)
 
 ---
 
@@ -196,15 +203,14 @@ pip3 install easydict Pillow opencv-python
 ```bash
 cd dino/code
 
-# Train with 4 GPUs
+# Train with 4 GPUs (example)
 export CUDA_VISIBLE_DEVICES=0,1,2,3
 python3 -m torch.distributed.run --nproc_per_node=4 main_dino.py \
     --arch regnet_y_800mf \
     --valid_data_pkl ../datalists/sample_cells_valid_img_path.pkl \
     --output_dir ../models \
     --batch_size_per_gpu 4 \
-    --epochs 100 \
-    --saveckp_freq 10
+    --saveckp_freq 1
 ```
 
 ### Stage 2: Weight Conversion and Fine-tuning
@@ -277,7 +283,7 @@ WSI2
 sample_data/
 ├── AUC/WSI4/AUC/*.png
 ├── HGUC/WSI6/HGUC/*.png
-├── NILM/WSI7/NILM/*.png
+├── yin/WSI7/NILM/*.png
 ...
 ```
 
@@ -311,7 +317,7 @@ patient_002,Neg,0,60
 
 ## Applications
 
-1. **Lymph Node Fine-Needle Aspiration Cytology Diagnosis**
+1. **Urine Cytology Lymph Node Metastasis Diagnosis**
    - Automated distinction between negative and positive cases
    - Assists pathologists in diagnosis
 

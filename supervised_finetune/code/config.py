@@ -22,7 +22,7 @@ train_cfg.enhance_times = 0
 
 train_cfg.preprocessing_func = lambda x:x
 train_cfg.batch_size = 4 # 16
-train_cfg.max_epoch = 2
+train_cfg.max_epoch = 30
 
 train_cfg.weight_path = None
 

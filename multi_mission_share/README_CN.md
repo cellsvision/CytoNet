@@ -23,13 +23,6 @@ multi_mission_share/
 └── results/                       # 评估结果
 ```
 
-## 模型架构
-
-- **骨干网络**：基于注意力机制的MIL，含共享全连接层
-- **分类头**：多层感知机，用于二分类
-- **生存分析头**：回归头，用于风险评分预测
-- **损失函数**：交叉熵损失 + Cox PH损失的联合损失
-
 ## 数据格式
 
 ### CSV列说明
@@ -41,8 +34,15 @@ multi_mission_share/
 | `dfs_time` | 无病生存时间（月） |
 
 ### 特征文件
-- 格式：`.pkl`（pickle）文件，包含768维特征
-- 每个文件包含按类别组织的多个patch特征
+- 格式：`.pkl`（pickle）文件
+- 每个文件包含按40倍图像下、符合patch size大小的patch推理的featuremap按照每一类的置信度前N个feature倒序排列并拼接聚合形成Tensor。例如，某张图可以裁切出50 * 60张patch，每个patch输入模型输出patch级别分类结果以及提取出特征图后，按照每一类置信度倒序的前300拼接成 [6*300, featuremap_length] 数组，保存成pkl。使用时，每300个featuremap提取前200个。
+
+```bash
+cls_bag_size = 300 
+top_cls_bag_size = 300
+use_cls_bag_size = 200
+```
+
 
 ## 训练方法
 
@@ -52,26 +52,21 @@ python train_test_multi.py
 ```
 
 ### 关键参数
-- `fea_size`：特征维度（768）
-- `batch_size`：训练批次大小（4）
-- `max_epoch`：最大训练轮数（100）
-- `max_patches`：每类最大patch数（200）
-- `alpha`：分类损失权重（1.0）
-- `beta`：生存损失权重（1.0）
+- `fea_size`：特征维度
+- `batch_size`：训练批次大小
+- `max_epoch`：最大训练轮数
+- `max_patches`：每类最大patch数
+- `alpha`：分类损失权重
+- `beta`：生存损失权重
 
 ## 评估指标
 
 - **分类任务**：AUC、敏感性、特异性
-- **生存分析**：C-Index、时间依赖性AUC（12、24、36、60个月）
+- **生存分析**：C-Index、时间依赖性AUC（12、24、36、48、60个月）
 
 ## 依赖环境
 
-- PyTorch
-- scikit-learn
-- lifelines
-- pandas
-- numpy
-- tensorboard
+参考requirements.txt
 
 ## 示例数据
 
@@ -79,10 +74,7 @@ python train_test_multi.py
 
 ## 日志说明
 
-训练日志保存至`logs/lymph_survival_train.log`，包含：
-- 每批次损失值
-- 每轮C-Index和AUC指标
-- 验证结果详情
+训练日志保存至`logs`
 
 ---
 
