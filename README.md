@@ -70,7 +70,7 @@ Uses over 100,000 unlabeled WSIs, cropped by size.
 #### Stage 2: Supervised Fine-tuning (Urine Cytology)
 
 - Each WSI is divided into multiple patches
-- Based on annotations, corresponding labeled patches are cropped. For urine cytology-specific background images (blood/glial/urinary protein, histiocytes) and blank backgrounds, 6 categories of patches are prepared:
+- Based on annotations, corresponding labeled patches are cropped. For urine cytology-specific background images and blank backgrounds, 6 categories of patches are prepared:
   - **NHGUC**: Normal cells (NILM/NHGUC)
   - **AUC**: Atypical Urothelial Cells
   - **HGUC**: High-grade Urothelial Carcinoma
